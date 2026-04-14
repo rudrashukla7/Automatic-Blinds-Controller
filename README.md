@@ -1,32 +1,34 @@
 # Automatic-Blinds-Controller
 
-A automated blinds system using an **ESP32**, **DRV8825 stepper driver**, and a **NEMA 17 stepper motor**.  
-The blinds are controlled wirelessly through a built-in web interface, allowing real-time control from any device on the same network.
+A WiFi-enabled automated blinds system using an **ESP32**, **DRV8825 stepper driver**, and a **NEMA 17 stepper motor**.  
+The system hosts a built-in web interface that allows real-time control of blinds from any device on the same network.
 
 ---
 
 ## Features
 
-- WiFi-based control via browser (no app required)
-- Clean, responsive web interface hosted on ESP32
-- Smooth, quiet motion using 1/16 microstepping
+- Web-based control (no app required)
+- Clean, responsive UI hosted directly on ESP32
+- Smooth motion using 1/16 microstepping
 - Manual open / close controls
-- Timed movement options (5 seconds)
-- Emergency stop functionality
-- Multitasking using dual-core ESP32 (motor runs independently of web server)
+- Timed movement (5-second presets)
+- Instant stop functionality
+- Dual-core multitasking (motor control runs independently)
+- Quiet and precise operation
 
 ---
 
 ## Components Used
 
-- **ESP32 Development Board (30-pin NodeMCU)**
-- **NEMA 17 Stepper Motor (1.5A, 12V)**
-- **DRV8825 Stepper Motor Driver**
-- **12V battery + buck converter (5V for ESP32)**
-- **35V 220µF Capacitor**
-- **Jumper wires / connectors**
-- **3D printed gear (for #10 bead chain)**
-- **Latch switch**
+- ESP32 Development Board (30-pin NodeMCU)
+- NEMA 17 Stepper Motor (12V, 1.5A)
+- DRV8825 Stepper Motor Driver
+- 12V battery or power supply
+- Buck converter (5V for ESP32)
+- 220µF capacitor (≥35V recommended)
+- Jumper wires
+- 3D printed gear (for #10 bead chain)
+- Latch switch
 
 ---
 
@@ -43,25 +45,28 @@ The blinds are controlled wirelessly through a built-in web interface, allowing 
 
 - **DRV8825 RST → SLP → ESP32 3.3V**  
 
-- **Microstepping:** M0 = 3.3V, M1 = 3.3V, M2 = GND (1/16 step)  
+- **Microstepping Configuration:**  
+  - M0 = 3.3V  
+  - M1 = 3.3V  
+  - M2 = GND  → (1/16 microstepping)
 
-- **Capacitor:** across VMOT and GND (close to driver)  
+- **Capacitor:** across VMOT and GND (placed close to driver)
 
-- **Motor:**  
+- **Motor Wiring:**  
   - A1 = Black  
   - A2 = Green  
   - B1 = Red  
   - B2 = Blue  
 
-> Ensure all grounds are connected.
+> All grounds must be connected together for proper operation.
 
 ---
 
 ## Web Interface
 
-<img width="387" height="591" alt="image" src="https://github.com/user-attachments/assets/995c17a3-b923-4e1d-bfa3-5598e091d076" />
+![Web Interface](web_interface.png)
 
-The ESP32 hosts a built-in control panel accessible through your browser.
+The ESP32 hosts a web dashboard accessible through its IP address.
 
 ### Controls
 
@@ -77,9 +82,11 @@ The ESP32 hosts a built-in control panel accessible through your browser.
 2. A web server runs on port 80  
 3. User accesses the ESP32 IP address in a browser  
 4. Button presses send HTTP requests to the ESP32  
-5. Commands trigger a motor task on Core 0  
-6. Stepper motor moves blinds via gear + bead chain  
-7. Stop command interrupts motion instantly  
+5. A motor task is created on Core 0  
+6. Stepper motor is driven via STEP/DIR signals  
+7. Stop command interrupts motion using a shared flag  
+
+The DRV8825 driver converts STEP and DIR signals into precise motor movement, allowing smooth control with microstepping :contentReference[oaicite:0]{index=0}.
 
 ---
 
@@ -87,8 +94,26 @@ The ESP32 hosts a built-in control panel accessible through your browser.
 
 - Microstepping: 1/16  
 - Step delay: 750 µs  
-- Full rotation steps: 32000 (~10 rotations)  
-- Timed movement: ~5 seconds  
+- Full movement: ~10 rotations (32000 steps)  
+- Timed movement: ~5 seconds (3333 steps)  
+
+---
+
+## 3D Printed Parts
+
+Custom parts are used to interface with the blinds system.
+
+### Files
+
+- `blinds_gear.stl` – engages with #10 bead chain  
+- `housing.stl` – enclosure for electronics
+- `lid.stl` – close the housing  
+
+### Notes
+
+- Designed for #10 bead chain (4mm beads, 2mm spacing)
+- Recommended material: PLA or PETG
+- Ensure proper fit before installation
 
 ---
 
@@ -97,7 +122,7 @@ The ESP32 hosts a built-in control panel accessible through your browser.
 - WiFi (ESP32 core)
 - WebServer (ESP32 core)
 
-Install them through the ESP32 board package in Arduino IDE.
+Included automatically with the ESP32 Arduino package.
 
 ---
 
@@ -106,7 +131,7 @@ Install them through the ESP32 board package in Arduino IDE.
 1. Open `Automatic Blinds Controller Code.ino` in Arduino IDE  
 2. Select **Board → ESP32 Dev Module**  
 3. Select the correct **COM Port**  
-4. Enter your WiFi credentials in the code:
+4. Update WiFi credentials:
    ```cpp
    const char* ssid = "your_wifi";
    const char* password = "your_password";
@@ -117,17 +142,18 @@ Install them through the ESP32 board package in Arduino IDE.
 
 ## Running the System
 
-1. Power the system with the 12V battery  
-2. Open Serial Monitor to find the ESP32 IP address  
-3. Enter the IP address into a web browser  
-4. Use the interface to control the blinds  
+1. Power the system with a 12V supply  
+2. Open Serial Monitor (115200 baud)  
+3. Note the ESP32 IP address  
+4. Enter the IP address into a browser  
+5. Use the interface to control blinds  
 
 ---
 
 ## Future Improvements
 
-- Limit switches for top/bottom detection  
-- Position tracking (open percentage)
-- Mobile app integration
-- Smart home integration (Google Home / Alexa)
-- Adjustable speed profiles
+- Limit switches for position detection  
+- Position tracking (percentage open/closed)  
+- Mobile app or remote access  
+- Smart home integration (Alexa / Google Home)  
+- Adjustable speed profiles  
