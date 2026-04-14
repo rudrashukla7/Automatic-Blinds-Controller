@@ -59,7 +59,7 @@ The blinds are controlled wirelessly through a built-in web interface, allowing 
 
 ## Web Interface
 
-![Web Interface](Web Interface.png)
+<img width="387" height="591" alt="image" src="https://github.com/user-attachments/assets/995c17a3-b923-4e1d-bfa3-5598e091d076" />
 
 The ESP32 hosts a built-in control panel accessible through your browser.
 
