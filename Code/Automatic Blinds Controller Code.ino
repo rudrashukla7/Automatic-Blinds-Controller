@@ -5,8 +5,8 @@
 #include <WebServer.h>
 
 // WiFi Credentials
-const char* ssid = "test";      //add your home internet name and password
-const char* password = "1234";
+const char* ssid = "your_wifi";
+const char* password = "your_password";
 
 // Pin Definitions
 #define STEP 26
