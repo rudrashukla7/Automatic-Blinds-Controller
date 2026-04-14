@@ -64,7 +64,7 @@ The system hosts a built-in web interface that allows real-time control of blind
 
 ## Web Interface
 
-![Web Interface](web_interface.png)
+<img width="387" height="591" alt="Screenshot 2026-04-13 225331" src="https://github.com/user-attachments/assets/e3df4faa-b7a6-4c7a-9120-dad941d04165" />
 
 The ESP32 hosts a web dashboard accessible through its IP address.
 
